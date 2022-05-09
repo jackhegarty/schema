@@ -25,11 +25,11 @@ For a list of supported drivers, and their capabilities with regards to sql.Colu
 ## Installation
 
 ```bash
-go get github.com/jimsmart/schema
+go get github.com/jackhegarty/schema
 ```
 
 ```go
-import "github.com/jimsmart/schema"
+import "github.com/jackhegarty/schema"
 ```
 
 ### Dependencies
