@@ -28,7 +28,7 @@ type testParams struct {
 
 	PrimaryKeysExpRes []string
 
-	ForeignKeysExpRes []string
+	ForeignKeysExpRes [][2]string
 }
 
 func SchemaTestRunner(params *testParams) {
