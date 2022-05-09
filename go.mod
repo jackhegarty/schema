@@ -1,4 +1,4 @@
-module github.com/jimsmart/schema
+module github.com/jackhegarty/schema
 
 go 1.16
 
