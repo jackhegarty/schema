@@ -72,6 +72,30 @@ const postgresPrimaryKeyWithSchema = `
 		kcu.ordinal_position
 `
 
+const postgresForeignKey = `
+	SELECT
+		CONCAT(ccu.table_name, '.', ccu.column_name)
+	FROM 
+		information_schema.table_constraints AS tc 
+	JOIN 
+		information_schema.key_column_usage AS kcu
+	ON 
+		tc.constraint_name = kcu.constraint_name
+	AND 
+		tc.table_schema = kcu.table_schema
+	JOIN 
+		information_schema.constraint_column_usage AS ccu
+	ON 
+		ccu.constraint_name = tc.constraint_name
+	AND 
+		ccu.table_schema = tc.table_schema
+	WHERE 
+		tc.constraint_type = 'FOREIGN KEY' AND 
+		tc.table_name = $1
+	ORDER BY
+	  kcu.ordinal_position
+`
+
 type postgresDialect struct{}
 
 func (postgresDialect) escapeIdent(ident string) string {
@@ -96,4 +120,8 @@ func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
 
 func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, postgresViewNamesWithSchema)
+}
+
+func (postgresDialect) ForeignKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, postgresForeignKey, "", name)
 }
