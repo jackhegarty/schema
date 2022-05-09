@@ -68,6 +68,30 @@ const mysqlPrimaryKeyWithSchema = `
 		sta.seq_in_index
 `
 
+const mysqlForeignKey = `
+	SELECT
+		CONCAT(rc.referenced_table_name, '.', kcu.referenced_column_name)
+	FROM 
+		information_schema.table_constraints AS tc 
+	JOIN 
+		information_schema.key_column_usage AS kcu
+	ON 
+		tc.constraint_name = kcu.constraint_name
+	AND 
+		tc.table_schema = kcu.table_schema
+	JOIN 
+		information_schema.referential_constraints AS rc
+	ON 
+		rc.constraint_name = tc.constraint_name
+	AND 
+		rc.constraint_schema = tc.table_schema
+	WHERE 
+		tc.constraint_type = 'FOREIGN KEY' AND 
+		tc.table_name = ?
+	ORDER BY
+		kcu.ordinal_position
+`
+
 type mysqlDialect struct{}
 
 func (mysqlDialect) escapeIdent(ident string) string {
@@ -92,4 +116,8 @@ func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 
 func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, mysqlViewNamesWithSchema)
+}
+
+func (mysqlDialect) ForeignKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, mysqlForeignKey, "", name)
 }

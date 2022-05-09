@@ -133,6 +133,15 @@ func PrimaryKey(db *sql.DB, schema, table string) ([]string, error) {
 	return d.PrimaryKey(db, schema, table)
 }
 
+func ForeignKey(db *sql.DB, table string) ([]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return d.ForeignKey(db, table)
+}
+
 // fetchNames executes the given query with an optional name parameter,
 // and returns a list of table/view/column names.
 //

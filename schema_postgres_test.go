@@ -48,7 +48,11 @@ var _ = Describe("schema", func() {
 				`CREATE TABLE person (
 					given_name		TEXT NOT NULL,
 					family_name		TEXT NOT NULL,
-					PRIMARY KEY (family_name, given_name)
+					web_resource_id INT NOT NULL,
+					PRIMARY KEY (family_name, given_name),
+					CONSTRAINT fk_web_resouce
+						FOREIGN KEY(web_resource_id)
+							REFERENCES web_resource(id)
 				)`,
 			},
 			DropDDL: []string{
@@ -86,6 +90,8 @@ var _ = Describe("schema", func() {
 			},
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
+
+			ForeignKeysExpRes: []string{"web_resource.id"},
 		}
 
 		SchemaTestRunner(postgres)

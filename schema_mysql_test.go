@@ -50,7 +50,11 @@ var _ = Describe("schema", func() {
 				`CREATE TABLE IF NOT EXISTS person (
 					given_name		VARCHAR(128) NOT NULL,
 					family_name		VARCHAR(128) NOT NULL,
-					PRIMARY KEY (family_name, given_name)
+					web_resource_id INTEGER NOT NULL,
+					PRIMARY KEY (family_name, given_name),
+					CONSTRAINT fk_web_resource
+					  FOREIGN KEY (web_resource_id)
+					    REFERENCES web_resource(id)
 				)`,
 			},
 			DropDDL: []string{
@@ -85,6 +89,8 @@ var _ = Describe("schema", func() {
 			},
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
+
+			ForeignKeysExpRes: []string{"web_resource.id"},
 		}
 
 		SchemaTestRunner(mysql)

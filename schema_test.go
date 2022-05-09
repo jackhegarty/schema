@@ -27,6 +27,8 @@ type testParams struct {
 	ViewNamesExpRes  [][2]string
 
 	PrimaryKeysExpRes []string
+
+	ForeignKeysExpRes []string
 }
 
 func SchemaTestRunner(params *testParams) {
@@ -186,6 +188,15 @@ func SchemaTestRunner(params *testParams) {
 		})
 	})
 
+	Describe("ForeignKey", func() {
+		It("should return the foreign key", func() {
+			db, done := setup()
+			defer done()
+			pk, err := schema.ForeignKey(db, params.TableNamesExpRes[0][1])
+			Expect(err).To(BeNil())
+			Expect(pk).To(Equal(params.ForeignKeysExpRes))
+		})
+	})
 }
 
 var _ = Describe("schema", func() {
@@ -219,6 +230,10 @@ var _ = Describe("schema", func() {
 
 			pk, err := schema.PrimaryKey(db, "", "web_resource")
 			Expect(pk).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
+
+			fk, err := schema.ForeignKey(db, "person")
+			Expect(fk).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
 			Expect(err.Error()).To(Equal("unknown database driver: schema_test.FakeDb"))
