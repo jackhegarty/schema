@@ -28,7 +28,7 @@ type testParams struct {
 
 	PrimaryKeysExpRes []string
 
-	ForeignKeysExpRes [][2]string
+	ForeignKeysExpRes map[string]string
 }
 
 func SchemaTestRunner(params *testParams) {
@@ -192,9 +192,9 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the foreign key", func() {
 			db, done := setup()
 			defer done()
-			pk, err := schema.ForeignKey(db, params.TableNamesExpRes[0][1])
+			fk, err := schema.ForeignKey(db, params.TableNamesExpRes[0][1])
 			Expect(err).To(BeNil())
-			Expect(pk).To(Equal(params.ForeignKeysExpRes))
+			Expect(fk).To(Equal(params.ForeignKeysExpRes))
 		})
 	})
 }

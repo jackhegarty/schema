@@ -123,6 +123,6 @@ func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, postgresViewNamesWithSchema)
 }
 
-func (postgresDialect) ForeignKey(db *sql.DB, name string) ([][2]string, error) {
+func (postgresDialect) ForeignKey(db *sql.DB, name string) (map[string]string, error) {
 	return fetchForeignKeyNames(db, postgresForeignKey, name)
 }

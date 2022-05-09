@@ -119,6 +119,6 @@ func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, mysqlViewNamesWithSchema)
 }
 
-func (mysqlDialect) ForeignKey(db *sql.DB, name string) ([][2]string, error) {
+func (mysqlDialect) ForeignKey(db *sql.DB, name string) (map[string]string, error) {
 	return fetchForeignKeyNames(db, mysqlForeignKey, name)
 }
