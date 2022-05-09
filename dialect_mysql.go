@@ -70,6 +70,7 @@ const mysqlPrimaryKeyWithSchema = `
 
 const mysqlForeignKey = `
 	SELECT
+		kcu.column_name,
 		CONCAT(rc.referenced_table_name, '.', kcu.referenced_column_name)
 	FROM 
 		information_schema.table_constraints AS tc 
@@ -118,6 +119,6 @@ func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, mysqlViewNamesWithSchema)
 }
 
-func (mysqlDialect) ForeignKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, mysqlForeignKey, "", name)
+func (mysqlDialect) ForeignKey(db *sql.DB, name string) ([][2]string, error) {
+	return fetchForeignKeyNames(db, mysqlForeignKey, name)
 }

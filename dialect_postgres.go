@@ -74,6 +74,7 @@ const postgresPrimaryKeyWithSchema = `
 
 const postgresForeignKey = `
 	SELECT
+		kcu.column_name,
 		CONCAT(ccu.table_name, '.', ccu.column_name)
 	FROM 
 		information_schema.table_constraints AS tc 
@@ -122,6 +123,6 @@ func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, postgresViewNamesWithSchema)
 }
 
-func (postgresDialect) ForeignKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, postgresForeignKey, "", name)
+func (postgresDialect) ForeignKey(db *sql.DB, name string) ([][2]string, error) {
+	return fetchForeignKeyNames(db, postgresForeignKey, name)
 }

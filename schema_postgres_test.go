@@ -50,7 +50,7 @@ var _ = Describe("schema", func() {
 					family_name		TEXT NOT NULL,
 					web_resource_id INT NOT NULL,
 					PRIMARY KEY (family_name, given_name),
-					CONSTRAINT fk_web_resouce
+					CONSTRAINT fk_web_resource
 						FOREIGN KEY(web_resource_id)
 							REFERENCES web_resource(id)
 				)`,
@@ -91,7 +91,9 @@ var _ = Describe("schema", func() {
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 
-			ForeignKeysExpRes: []string{"web_resource.id"},
+			ForeignKeysExpRes: [][2]string{
+				{"web_resource_id", "web_resource.id"},
+			},
 		}
 
 		SchemaTestRunner(postgres)
