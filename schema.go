@@ -133,7 +133,7 @@ func PrimaryKey(db *sql.DB, schema, table string) ([]string, error) {
 	return d.PrimaryKey(db, schema, table)
 }
 
-func ForeignKey(db *sql.DB, table string) ([][2]string, error) {
+func ForeignKey(db *sql.DB, table string) (map[string]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
@@ -171,7 +171,7 @@ func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 	return names, nil
 }
 
-func fetchForeignKeyNames(db *sql.DB, query string, name string) ([][2]string, error) {
+func fetchForeignKeyNames(db *sql.DB, query string, name string) (map[string]string, error) {
 	var rows *sql.Rows
 	var err error
 	rows, err = db.Query(query, name)
@@ -180,7 +180,7 @@ func fetchForeignKeyNames(db *sql.DB, query string, name string) ([][2]string, e
 	}
 	defer rows.Close()
 	// Scan result into list of names.
-	var names [][2]string
+	var names = make(map[string]string)
 	s := ""
 	n := ""
 	for rows.Next() {
@@ -188,7 +188,7 @@ func fetchForeignKeyNames(db *sql.DB, query string, name string) ([][2]string, e
 		if err != nil {
 			return nil, err
 		}
-		names = append(names, [2]string{s, n})
+		names[s] = n
 	}
 	return names, nil
 }

@@ -90,8 +90,8 @@ var _ = Describe("schema", func() {
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 
-			ForeignKeysExpRes: [][2]string{
-				{"web_resource_id", "web_resource.id"},
+			ForeignKeysExpRes: map[string]string{
+				"web_resource_id": "web_resource.id",
 			},
 		}
 

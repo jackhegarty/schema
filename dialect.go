@@ -10,7 +10,7 @@ type dialect interface {
 
 	ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
-	ForeignKey(db *sql.DB, name string) ([][2]string, error)
+	ForeignKey(db *sql.DB, name string) (map[string]string, error)
 	TableNames(db *sql.DB) ([][2]string, error)
 	ViewNames(db *sql.DB) ([][2]string, error)
 }
